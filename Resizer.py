@@ -59,7 +59,7 @@ class Resizer:
 
         for g in range(column, n_column):
             for h in range(row, n_row):
-                self.new_image[g][h] = last_element
+                self.new_image[h][g] = last_element
 
         return self.get_new_image()
 

@@ -4,9 +4,10 @@ This moudule creates the GUI
 """
 
 import Resizer as rz
-
+import DCT as dct_nostra
 from Tkinter import *
 import tkFileDialog
+import QMatrix as qm
 import matplotlib.pyplot as plt
 from scipy import misc
 
@@ -43,15 +44,19 @@ class GUI:
         print "Percorso del file: " + fileName
         self.imageFile = misc.imread(fileName)
         #self.imageFile.size
-        #print self.imageFile
+        print self.imageFile
 
-        resize = rz.Resizer(self.imageFile, 7)
-        new_image = resize.get_new_image()
+        # resize = rz.Resizer(self.imageFile, 7)
+        # new_image = resize.get_new_image()
+        #
+        # plt.imshow(new_image, cmap=plt.cm.gray)
+        # plt.show()
 
-        print new_image
+        qNMatrixClass = qm.QMatrix(50, 2)
+        qNMatrix = qNMatrixClass.transformQOne()
+        trans = dct_nostra.DCT(qNMatrix, self.imageFile, 8)
+        trans.localDct()
 
-        plt.imshow(new_image, cmap=plt.cm.gray)
-        plt.show()
 
 root = Tk()
 my_gui = GUI(root)
