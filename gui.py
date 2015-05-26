@@ -3,6 +3,8 @@ This moudule creates the GUI
 
 """
 
+import Resizer as rz
+
 from Tkinter import *
 import tkFileDialog
 import matplotlib.pyplot as plt
@@ -40,8 +42,13 @@ class GUI:
         fileName = tkFileDialog.askopenfilename()
         print "Percorso del file: " + fileName
         self.imageFile = misc.imread(fileName)
-        print self.imageFile
-        plt.imshow(self.imageFile, cmap=plt.cm.gray)
+        #self.imageFile.size
+        #print self.imageFile
+
+        resize = rz.Resizer(self.imageFile, 7)
+        new_image = resize.get_new_image()
+
+        plt.imshow(new_image, cmap=plt.cm.gray)
         plt.show()
 
 root = Tk()
