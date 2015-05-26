@@ -48,6 +48,8 @@ class GUI:
         resize = rz.Resizer(self.imageFile, 7)
         new_image = resize.get_new_image()
 
+        print new_image
+
         plt.imshow(new_image, cmap=plt.cm.gray)
         plt.show()
 

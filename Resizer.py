@@ -1,6 +1,7 @@
+import numpy as np
+
 
 class Resizer:
-
     def __init__(self, image, n_value):
         self.image = image
         self.n_value = n_value
@@ -35,23 +36,32 @@ class Resizer:
         else:
             n_column = column
 
-        print 'Righe:', n_row,' Colonne:', n_column
+        print 'Righe:', n_row, ' Colonne:', n_column
 
-        new_image = [[0] * n_column] * n_row
+        self.new_image = np.zeros(shape=(n_row, n_column))
 
-        for row in range(len(new_image)):
+        # estendiamo l'immagine
+        for i in range(len(self.image)):
+            for j in range(len(self.image[0])):
+                self.new_image[i][j] = self.image[i][j]
+        #prendiamo l'ultima riga, l'ultima colonna e l'ultimo elemento in basso a destra
+        last_row = self.image[-1, :]
+        last_col = self.image[:, -1]
+        last_element = self.image[-1, -1]
 
-            for column in range(len(new_image[0])):
-                # 
-                # if row > len(new_image):
-                #
-                #
-                # if self.image[row][column] > 255:
-                #     new_image[row][column] = 255
-                # elif self.image[row][column] < 0:
-                #     new_image[row][column] = 0
-                # else:
-                #     new_image[row][column] = self.image[row][column]
+        for i in range(row, n_row):
+            for j in range(0, column):
+                self.new_image[i][j] = last_row[j]
+
+        for x in range(column, n_column):
+            for z in range(0, row):
+                self.new_image[z][x] = last_col[z]
+
+        for g in range(column, n_column):
+            for h in range(row, n_row):
+                self.new_image[g][h] = last_element
+
+        return self.get_new_image()
 
 
     def get_new_image(self):
