@@ -38,5 +38,4 @@ class QMatrix:
                     for t in range(j*self.N, j*self.N + self.N):
                         self.qNMatrix[v][t] = qOne[x][j]
 
-        print qOne
-        print self.qNMatrix
+

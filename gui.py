@@ -44,7 +44,6 @@ class GUI:
         print "Percorso del file: " + fileName
         self.imageFile = misc.imread(fileName)
         #self.imageFile.size
-        print self.imageFile
 
         # resize = rz.Resizer(self.imageFile, 7)
         # new_image = resize.get_new_image()
@@ -54,7 +53,7 @@ class GUI:
 
         qNMatrixClass = qm.QMatrix(50, 2)
         qNMatrix = qNMatrixClass.transformQOne()
-        trans = dct_nostra.DCT(qNMatrix, self.imageFile, 8)
+        trans = dct_nostra.DCT(qNMatrix, self.imageFile, 64)
         trans.localDct()
 
 
