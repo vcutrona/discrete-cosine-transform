@@ -40,20 +40,14 @@ class LocalDCT:
     def local_quantization(self):
         for x in range(0, self.image.shape[0], 8 * self.value_n):
             for y in range(0, self.image.shape[1], 8 * self.value_n):
-                if self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)] != 0:
-                    div = self.image[x][y] // self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)]
-                    if np.fabs(self.image[x][y] - self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)] * div) \
-                            > np.fabs(self.image[x][y] - self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)] * (div + 1)):
-                        self.image[x][y] = div + 1
-                    else:
-                        self.image[x][y] = div
-                else:
-                    self.image[x][y] = 0
+                matrix = self.image[x: x + 8 * self.value_n, y: y + 8 * self.value_n]
+                self.image[x: x + 8 * self.value_n, y: y + 8 * self.value_n] = self.l_qnt(matrix)
 
     def local_dequantization(self):
         for x in range(0, self.image.shape[0], 8 * self.value_n):
             for y in range(0, self.image.shape[1], 8 * self.value_n):
-                self.image[x][y] = self.image[x][y] * self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)]
+                matrix = self.image[x: x + 8 * self.value_n, y: y + 8 * self.value_n]
+                self.image[x: x + 8 * self.value_n, y: y + 8 * self.value_n] = self.l_deqnt(matrix)
 
     # Compute DCT2
     @staticmethod
@@ -64,6 +58,25 @@ class LocalDCT:
     @staticmethod
     def l_idct(matrix):
         return idct(idct(matrix, axis=0, norm='ortho'), axis=1, norm='ortho')
+
+    def l_qnt(self, matrix):
+        for x in range(0, matrix.shape[0]):
+            for y in range(0, matrix.shape[1]):
+                if self.matrix_qn[x][y] != 0:
+                    div = matrix[x][y] // self.matrix_qn[x][y]
+                    if np.fabs(matrix[x][y] - self.matrix_qn[x][y] * div) > np.fabs(matrix[x][y] - self.matrix_qn[x][y] * (div + 1)):
+                        matrix[x][y] = div + 1
+                    else:
+                        matrix[x][y] = div
+                else:
+                    matrix[x][y] = 0
+        return matrix
+
+    def l_deqnt(self, matrix):
+        for x in range(0, matrix.shape[0]):
+            for y in range(0, matrix.shape[1]):
+                matrix[x][y] = matrix[x][y] * self.matrix_qn[x][y]
+        return matrix
 
     def get_image_compressed(self):
         return self.image
