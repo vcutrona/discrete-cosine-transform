@@ -1,6 +1,7 @@
 from __future__ import division
 import numpy as np
 
+
 class QNMatrix:
 
     def __init__(self, value_n, value_quality):

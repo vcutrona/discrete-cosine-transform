@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Resizer:
 
     def __init__(self, image, n_value):

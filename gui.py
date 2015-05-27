@@ -9,6 +9,7 @@ from Tkinter import *
 import tkFileDialog
 import tkMessageBox
 
+
 class GUI:
 
     def __init__(self, master):
@@ -21,7 +22,7 @@ class GUI:
 
         # Create the GUI
         self.master = master
-        master.title("Compressione con la DCT")
+        master.title("Compressione con la DCT2")
 
         self.label = Label(master, text="Inserisci il percorso dell'Immagine")
         self.label.pack()
@@ -121,16 +122,20 @@ class GUI:
 
     def show_results(self):
 
+        # Create the new figure
         figure = plt.figure()
 
+        # Put the resize image
         before = figure.add_subplot(1, 2, 1)
         plt.imshow(self.image_resized, cmap=plt.cm.gray)
-        before.set_title('Prima')
+        before.set_title('Ridimensionata')
 
-        after = figure.add_subplot(1,2,2)
+        # Put the compressed image
+        after = figure.add_subplot(1, 2, 2)
         plt.imshow(self.image_final, cmap=plt.cm.gray)
-        after.set_title('Dopo')
+        after.set_title('Compressa')
 
+        # Show results
         figure.show()
 
 if __name__ == "__main__":
