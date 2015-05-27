@@ -40,12 +40,15 @@ class LocalDCT:
     def local_quantization(self):
         for x in range(0, self.image.shape[0], 8 * self.value_n):
             for y in range(0, self.image.shape[1], 8 * self.value_n):
-                div = self.image[x][y] // self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)]
-                if np.fabs(self.image[x][y] - self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)] * div) \
-                        > np.fabs(self.image[x][y] - self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)] * (div + 1)):
-                    self.image[x][y] = div + 1
+                if self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)] != 0:
+                    div = self.image[x][y] // self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)]
+                    if np.fabs(self.image[x][y] - self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)] * div) \
+                            > np.fabs(self.image[x][y] - self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)] * (div + 1)):
+                        self.image[x][y] = div + 1
+                    else:
+                        self.image[x][y] = div
                 else:
-                    self.image[x][y] = div
+                    self.image[x][y] = 0
 
     def local_dequantization(self):
         for x in range(0, self.image.shape[0], 8 * self.value_n):
