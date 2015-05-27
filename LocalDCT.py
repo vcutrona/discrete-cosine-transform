@@ -38,7 +38,19 @@ class LocalDCT:
                     self.image[i][j] = 255
 
     def local_quantization(self):
-        return self
+        for x in range(0, self.image.shape[0], 8 * self.value_n):
+            for y in range(0, self.image.shape[1], 8 * self.value_n):
+                div = self.image[x][y] // self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)]
+                if np.fabs(self.image[x][y] - self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)] * div) \
+                        > np.fabs(self.image[x][y] - self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)] * (div + 1)):
+                    self.image[x][y] = div + 1
+                else:
+                    self.image[x][y] = div
+
+    def local_dequantization(self):
+        for x in range(0, self.image.shape[0], 8 * self.value_n):
+            for y in range(0, self.image.shape[1], 8 * self.value_n):
+                self.image[x][y] = self.image[x][y] * self.matrix_qn[x % (8 * self.value_n)][y % (8 * self.value_n)]
 
     # Compute DCT2
     @staticmethod

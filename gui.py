@@ -1,3 +1,4 @@
+from numpy import copy
 from Resizer import Resizer as rz
 from QNMatrix import QNMatrix as qm
 from LocalDCT import LocalDCT as ldct
@@ -102,13 +103,16 @@ class GUI:
                 self.matrix_qn = matrix_q.get_qn()
 
                 # Initialize Local DCT Class
-                compression = ldct(self.image_resized, self.matrix_qn, value_n)
+                compression = ldct(copy(self.image_resized), self.matrix_qn, value_n)
 
                 # Execute DCT2
                 compression.local_dct()
 
                 # Execute Quantization
-                # compression.local_quantization()
+                compression.local_quantization()
+
+                # Execute de-quantization
+                compression.local_dequantization()
 
                 # Execute I-DCT2
                 compression.local_idct()
